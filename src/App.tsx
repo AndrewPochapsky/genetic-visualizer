@@ -1,9 +1,9 @@
 import React from "react";
-import GeneticVisualizer from "./components/GeneticVisualizer";
+import Settings from "./components/Settings";
 import "./App.css";
 
 function App() {
-  return <GeneticVisualizer></GeneticVisualizer>;
+  return <Settings />;
 }
 
 export default App;
