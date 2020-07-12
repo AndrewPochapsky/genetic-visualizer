@@ -6,31 +6,34 @@ import Form from "react-bootstrap/Form";
 import Button from "react-bootstrap/Button";
 import FormControl from "react-bootstrap/FormControl";
 
-export default class Header extends React.Component {
+type HeaderProps = {
+  generationNumber: number;
+  nextGeneration: Function;
+  sortByFitness: Function;
+};
+
+export default class Header extends React.Component<HeaderProps> {
   render() {
     return (
       <Navbar bg="light" expand="lg">
-        <Navbar.Brand href="#home">React-Bootstrap</Navbar.Brand>
+        <Navbar.Brand href="#home">Genetic Visualizer</Navbar.Brand>
         <Navbar.Toggle aria-controls="basic-navbar-nav" />
         <Navbar.Collapse id="basic-navbar-nav">
           <Nav className="mr-auto">
-            <Nav.Link href="#home">Home</Nav.Link>
-            <Nav.Link href="#link">Link</Nav.Link>
-            <NavDropdown title="Dropdown" id="basic-nav-dropdown">
-              <NavDropdown.Item href="#action/3.1">Action</NavDropdown.Item>
-              <NavDropdown.Item href="#action/3.2">
-                Another action
-              </NavDropdown.Item>
-              <NavDropdown.Item href="#action/3.3">Something</NavDropdown.Item>
-              <NavDropdown.Divider />
-              <NavDropdown.Item href="#action/3.4">
-                Separated link
-              </NavDropdown.Item>
-            </NavDropdown>
+            <Navbar.Text>
+              Generation Number: {this.props.generationNumber}
+            </Navbar.Text>
           </Nav>
           <Form inline>
-            <FormControl type="text" placeholder="Search" className="mr-sm-2" />
-            <Button variant="outline-success">Search</Button>
+            <Button onClick={(e) => this.props.sortByFitness()}>
+              Sort by fitness
+            </Button>
+            <Button onClick={(e) => this.props.nextGeneration()}>
+              Next Generation
+            </Button>
+            <Button onClick={(e) => this.props.nextGeneration(10)}>
+              Next Generation (x10)
+            </Button>
           </Form>
         </Navbar.Collapse>
       </Navbar>

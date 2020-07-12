@@ -5,14 +5,14 @@ import Card from "react-bootstrap/Card";
 
 type SettingsState = {
   endColor: [number, number, number];
-  gridSize: GridSize;
+  populationSize: PopulationSize;
 };
 
 type SettingsProps = {
   switchToVisualize: Function;
 };
 
-export enum GridSize {
+export enum PopulationSize {
   Small,
   Medium,
   Large,
@@ -24,31 +24,36 @@ export default class Settings extends React.Component<
 > {
   state: SettingsState = {
     endColor: [0, 0, 0],
-    gridSize: GridSize.Medium,
+    populationSize: PopulationSize.Medium,
   };
 
   private handleVisualize = (e: React.FormEvent) => {
-    this.props.switchToVisualize(this.state.endColor, this.state.gridSize);
+    this.props.switchToVisualize(
+      this.state.endColor,
+      this.state.populationSize
+    );
   };
 
-  private handleGridSizeChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    let gridSize = GridSize.Medium;
+  private handlePopulationSizeChange = (
+    e: React.ChangeEvent<HTMLSelectElement>
+  ) => {
+    let populationSize = PopulationSize.Medium;
     switch (e.currentTarget.value) {
       case "Small": {
-        gridSize = GridSize.Small;
+        populationSize = PopulationSize.Small;
         break;
       }
       case "Medium": {
-        gridSize = GridSize.Medium;
+        populationSize = PopulationSize.Medium;
         break;
       }
       case "Large": {
-        gridSize = GridSize.Large;
+        populationSize = PopulationSize.Large;
         break;
       }
     }
     this.setState({
-      gridSize: gridSize,
+      populationSize: populationSize,
     });
   };
 
@@ -81,7 +86,7 @@ export default class Settings extends React.Component<
                 <Form.Control
                   as="select"
                   defaultValue="Medium"
-                  onChange={this.handleGridSizeChange}
+                  onChange={this.handlePopulationSizeChange}
                 >
                   <option>Small</option>
                   <option>Medium</option>
