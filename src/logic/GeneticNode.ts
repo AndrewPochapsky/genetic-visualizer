@@ -1,4 +1,4 @@
-export default class Node {
+export default class GeneticNode {
   private colorVector: [number, number, number];
   constructor() {
     // Initialize to white.

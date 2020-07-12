@@ -1,17 +1,25 @@
 import React from "react";
 import Header from "./Header";
-import Node from "../logic/Node";
+import GeneticNode from "../logic/GeneticNode";
 
-type VisualizerState = {
-  grid: Array<Node>;
-  startColor: [number, number, number];
+type VisualizerProps = {
+  endColor: [number, number, number];
+  populationSize: number;
 };
 
-export default class GeneticVisualizer extends React.Component {
+type VisualizerState = {
+  grid: Array<GeneticNode>;
+};
+
+export default class GeneticVisualizer extends React.Component<
+  VisualizerProps,
+  VisualizerState
+> {
   render() {
     return (
       <div>
         <Header />
+        <div className="grid"></div>
       </div>
     );
   }

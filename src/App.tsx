@@ -1,5 +1,6 @@
 import React from "react";
 import Settings from "./components/Settings";
+import GeneticVisualizer from "./components/GeneticVisualizer";
 import "./App.css";
 
 type AppState = {
@@ -30,7 +31,12 @@ class App extends React.Component<{}, AppState> {
     if (this.state.isSettings) {
       return <Settings switchToVisualize={this.switchToVisualize} />;
     } else {
-      return <div />;
+      return (
+        <GeneticVisualizer
+          endColor={this.state.endColor}
+          populationSize={this.state.populationSize}
+        />
+      );
     }
   }
 }
