@@ -5,12 +5,18 @@ import Card from "react-bootstrap/Card";
 
 type SettingsState = {
   endColor: [number, number, number];
-  populationSize: number;
+  gridSize: GridSize;
 };
 
 type SettingsProps = {
   switchToVisualize: Function;
 };
+
+export enum GridSize {
+  Small,
+  Medium,
+  Large,
+}
 
 export default class Settings extends React.Component<
   SettingsProps,
@@ -18,21 +24,32 @@ export default class Settings extends React.Component<
 > {
   state: SettingsState = {
     endColor: [0, 0, 0],
-    populationSize: 0,
+    gridSize: GridSize.Medium,
   };
 
   private handleVisualize = (e: React.FormEvent) => {
-    e.preventDefault();
-    this.props.switchToVisualize(
-      this.state.endColor,
-      this.state.populationSize
-    );
+    this.props.switchToVisualize(this.state.endColor, this.state.gridSize);
   };
 
-  private handlePopulationSizeChange = (
-    e: React.ChangeEvent<HTMLSelectElement>
-  ) => {
-    this.setState({ populationSize: +e.currentTarget.value });
+  private handleGridSizeChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    let gridSize = GridSize.Medium;
+    switch (e.currentTarget.value) {
+      case "Small": {
+        gridSize = GridSize.Small;
+        break;
+      }
+      case "Medium": {
+        gridSize = GridSize.Medium;
+        break;
+      }
+      case "Large": {
+        gridSize = GridSize.Large;
+        break;
+      }
+    }
+    this.setState({
+      gridSize: gridSize,
+    });
   };
 
   private handleColorChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
@@ -55,18 +72,21 @@ export default class Settings extends React.Component<
           <Card.Header as="h5">Genetic Visualizer</Card.Header>
           <Card.Body>
             <Form>
-              <Form.Group controlId="formPopulationSize">
-                <Form.Label>Population Size</Form.Label>
-                <Form.Control
-                  type="number"
-                  min="1"
-                  placeholder="Enter population size"
-                  onChange={this.handlePopulationSizeChange}
-                />
-              </Form.Group>
               <Form.Group controlId="formEndColor">
                 <Form.Label>The color to converge to</Form.Label>
                 <Form.Control type="color" onChange={this.handleColorChange} />
+              </Form.Group>
+              <Form.Group controlId="formGridState">
+                <Form.Label>Population Size</Form.Label>
+                <Form.Control
+                  as="select"
+                  defaultValue="Medium"
+                  onChange={this.handleGridSizeChange}
+                >
+                  <option>Small</option>
+                  <option>Medium</option>
+                  <option>Large</option>
+                </Form.Control>
               </Form.Group>
               <Button variant="primary" onClick={this.handleVisualize}>
                 Visualize

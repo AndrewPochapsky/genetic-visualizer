@@ -1,29 +1,29 @@
 import React from "react";
-import Settings from "./components/Settings";
+import Settings, { GridSize } from "./components/Settings";
 import GeneticVisualizer from "./components/GeneticVisualizer";
 import "./App.css";
 
 type AppState = {
   isSettings: boolean;
   endColor: [number, number, number];
-  populationSize: number;
+  gridSize: GridSize;
 };
 
 class App extends React.Component<{}, AppState> {
   state: AppState = {
     isSettings: true,
     endColor: [0, 0, 0],
-    populationSize: 0,
+    gridSize: GridSize.Medium,
   };
 
   switchToVisualize = (
     endColor: [number, number, number],
-    populationSize: number
+    gridSize: GridSize
   ) => {
     this.setState({
       isSettings: false,
       endColor: endColor,
-      populationSize: populationSize,
+      gridSize: gridSize,
     });
   };
 
@@ -34,7 +34,7 @@ class App extends React.Component<{}, AppState> {
       return (
         <GeneticVisualizer
           endColor={this.state.endColor}
-          populationSize={this.state.populationSize}
+          gridSize={this.state.gridSize}
         />
       );
     }

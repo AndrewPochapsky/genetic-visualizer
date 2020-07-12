@@ -1,5 +1,5 @@
 export default class GeneticNode {
-  private colorVector: [number, number, number];
+  colorVector: [number, number, number];
   constructor() {
     // Initialize to white.
     this.colorVector = [255, 255, 255];
