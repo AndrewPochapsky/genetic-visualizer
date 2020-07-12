@@ -1,29 +1,26 @@
 import React from "react";
-import Settings, { PopulationSize } from "./components/Settings";
+import Settings, {
+  getDefaultSettings,
+  SettingsState,
+} from "./components/Settings";
 import GeneticVisualizer from "./components/GeneticVisualizer";
 import "./App.css";
 
 type AppState = {
   isSettings: boolean;
-  endColor: [number, number, number];
-  populationSize: PopulationSize;
+  settings: SettingsState;
 };
 
 class App extends React.Component<{}, AppState> {
   state: AppState = {
     isSettings: true,
-    endColor: [0, 0, 0],
-    populationSize: PopulationSize.Medium,
+    settings: getDefaultSettings(),
   };
 
-  switchToVisualize = (
-    endColor: [number, number, number],
-    populationSize: PopulationSize
-  ) => {
+  switchToVisualize = (settingsState: SettingsState) => {
     this.setState({
       isSettings: false,
-      endColor: endColor,
-      populationSize: populationSize,
+      settings: settingsState,
     });
   };
 
@@ -31,12 +28,7 @@ class App extends React.Component<{}, AppState> {
     if (this.state.isSettings) {
       return <Settings switchToVisualize={this.switchToVisualize} />;
     } else {
-      return (
-        <GeneticVisualizer
-          endColor={this.state.endColor}
-          populationSize={this.state.populationSize}
-        />
-      );
+      return <GeneticVisualizer settings={this.state.settings} />;
     }
   }
 }

@@ -3,10 +3,11 @@ import Form from "react-bootstrap/Form";
 import Button from "react-bootstrap/Button";
 import Card from "react-bootstrap/Card";
 
-type SettingsState = {
+export interface SettingsState {
   endColor: [number, number, number];
   populationSize: PopulationSize;
-};
+  mutationType: MutationType;
+}
 
 type SettingsProps = {
   switchToVisualize: Function;
@@ -18,20 +19,46 @@ export enum PopulationSize {
   Large,
 }
 
+export enum MutationType {
+  Gradual,
+  Invert,
+}
+
+export function getDefaultSettings(): SettingsState {
+  return {
+    endColor: [0, 0, 0],
+    populationSize: PopulationSize.Medium,
+    mutationType: MutationType.Gradual,
+  };
+}
+
 export default class Settings extends React.Component<
   SettingsProps,
   SettingsState
 > {
-  state: SettingsState = {
-    endColor: [0, 0, 0],
-    populationSize: PopulationSize.Medium,
+  state: SettingsState = getDefaultSettings();
+
+  private handleVisualize = (_: React.FormEvent) => {
+    this.props.switchToVisualize(this.state);
   };
 
-  private handleVisualize = (e: React.FormEvent) => {
-    this.props.switchToVisualize(
-      this.state.endColor,
-      this.state.populationSize
-    );
+  private handleMutationTypeChange = (
+    e: React.ChangeEvent<HTMLSelectElement>
+  ) => {
+    let mutationType = MutationType.Gradual;
+    switch (e.currentTarget.value) {
+      case "Gradual": {
+        mutationType = MutationType.Gradual;
+        break;
+      }
+      case "Invert": {
+        mutationType = MutationType.Invert;
+        break;
+      }
+    }
+    this.setState({
+      mutationType: mutationType,
+    });
   };
 
   private handlePopulationSizeChange = (
@@ -81,7 +108,7 @@ export default class Settings extends React.Component<
                 <Form.Label>The color to converge to</Form.Label>
                 <Form.Control type="color" onChange={this.handleColorChange} />
               </Form.Group>
-              <Form.Group controlId="formGridState">
+              <Form.Group controlId="formPopulationSize">
                 <Form.Label>Population Size</Form.Label>
                 <Form.Control
                   as="select"
@@ -91,6 +118,17 @@ export default class Settings extends React.Component<
                   <option>Small</option>
                   <option>Medium</option>
                   <option>Large</option>
+                </Form.Control>
+              </Form.Group>
+              <Form.Group controlId="formMutationType">
+                <Form.Label>Mutation Type</Form.Label>
+                <Form.Control
+                  as="select"
+                  defaultValue="Gradual"
+                  onChange={this.handleMutationTypeChange}
+                >
+                  <option>Gradual</option>
+                  <option>Invert</option>
                 </Form.Control>
               </Form.Group>
               <Button variant="primary" onClick={this.handleVisualize}>

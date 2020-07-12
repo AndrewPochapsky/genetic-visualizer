@@ -25,13 +25,22 @@ export default class Header extends React.Component<HeaderProps> {
             </Navbar.Text>
           </Nav>
           <Form inline>
-            <Button onClick={(e) => this.props.sortByFitness()}>
+            <Button
+              className="mr-sm-2"
+              onClick={(_) => this.props.sortByFitness()}
+            >
               Sort by fitness
             </Button>
-            <Button onClick={(e) => this.props.nextGeneration()}>
+            <Button
+              className="mr-sm-2"
+              onClick={(_) => this.props.nextGeneration()}
+            >
               Next Generation
             </Button>
-            <Button onClick={(e) => this.props.nextGeneration(10)}>
+            <Button
+              className="mr-sm-2"
+              onClick={(_) => this.props.nextGeneration(10)}
+            >
               Next Generation (x10)
             </Button>
           </Form>

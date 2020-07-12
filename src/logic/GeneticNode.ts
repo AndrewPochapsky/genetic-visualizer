@@ -20,6 +20,30 @@ export default class GeneticNode {
     return offspring;
   }
 
+  static getMatingPool(
+    flattenedNodes: GeneticNode[],
+    targetColor: [number, number, number]
+  ): GeneticNode[] {
+    let threshold = 0.2;
+    this.sortByFitness(flattenedNodes, targetColor);
+    return flattenedNodes.slice(
+      0,
+      Math.round(flattenedNodes.length * threshold)
+    );
+  }
+
+  static sortByFitness(
+    flattenedNodes: GeneticNode[],
+    targetColor: [number, number, number]
+  ) {
+    flattenedNodes.sort((a, b) =>
+      a.getDistanceFromTarget(targetColor) <
+      b.getDistanceFromTarget(targetColor)
+        ? -1
+        : 1
+    );
+  }
+
   // Used as the fitness in this case, smaller number -> more fit.
   getDistanceFromTarget(targetColor: [number, number, number]): number {
     let difference = [0, 0, 0];
@@ -33,12 +57,24 @@ export default class GeneticNode {
     );
   }
 
-  mutate(generationNumber: number) {
+  mutateGradual(generationNumber: number) {
+    this.mutate(
+      generationNumber,
+      (x: number) => x + this.getRandomInt(-50, 50)
+    );
+  }
+
+  mutateInvert(generationNumber: number) {
+    this.mutate(generationNumber, (x: number) => 255 - x);
+  }
+
+  private mutate(generationNumber: number, mutation: Function) {
     let mutationChance = this.getMutationChance(generationNumber);
     for (let i = 0; i < 3; i++) {
       let value = Math.random();
       if (value <= mutationChance) {
-        this.colorVector[i] = 255 - this.colorVector[i];
+        //this.colorVector[i] = 255 - this.colorVector[i];
+        this.colorVector[i] = mutation(this.colorVector[i]);
         if (this.colorVector[i] > 255) {
           this.colorVector[i] = 255;
         } else if (this.colorVector[i] < 0) {
@@ -48,14 +84,17 @@ export default class GeneticNode {
     }
   }
 
-  getMutationChance(generationNumber: number) {
-    let baseChance = 0.3;
-    return baseChance / generationNumber;
-  }
-
-  private getRandomInt(min: number, max: number) {
+  private getRandomInt(min: number, max: number): number {
     min = Math.ceil(min);
     max = Math.floor(max);
     return Math.floor(Math.random() * (max - min + 1)) + min;
+  }
+
+  /*
+   * As the generation number goes up the mutation chance should be decreased.
+   */
+  getMutationChance(generationNumber: number) {
+    let baseChance = 0.2;
+    return baseChance / generationNumber;
   }
 }

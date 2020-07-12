@@ -1,7 +1,7 @@
 import React from "react";
 import Header from "./Header";
 import GeneticNode from "../logic/GeneticNode";
-import { PopulationSize } from "./Settings";
+import { SettingsState, PopulationSize, MutationType } from "./Settings";
 import Node from "./node/Node";
 import "./GeneticVisualizer.css";
 import Container from "react-bootstrap/Container";
@@ -9,8 +9,7 @@ import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
 
 type VisualizerProps = {
-  endColor: [number, number, number];
-  populationSize: PopulationSize;
+  settings: SettingsState;
 };
 
 type VisualizerState = {
@@ -28,7 +27,6 @@ export default class GeneticVisualizer extends React.Component<
   };
 
   componentDidMount() {
-    console.log(this.props.endColor);
     this.setState({
       grid: this.getInitialGrid(),
     });
@@ -36,17 +34,22 @@ export default class GeneticVisualizer extends React.Component<
 
   nextGeneration = (times = 1) => {
     let grid = this.state.grid;
+    let flattenedNodes = this.getFlattenedNodes(grid);
+    let generationNumber = this.state.generationNumber;
     for (let i = 0; i < times; i++) {
-      let flattenedNodes = this.getFlattenedNodes(grid);
-      let matingPool = this.getMatingPool(flattenedNodes, this.props.endColor);
+      let matingPool = GeneticNode.getMatingPool(
+        flattenedNodes,
+        this.props.settings.endColor
+      );
       let numCrossovers = flattenedNodes.length - matingPool.length;
-      let nextPopulation = this.getNextPopulation(
+      flattenedNodes = this.getNextPopulation(
         matingPool,
         numCrossovers,
-        this.state.generationNumber + i
+        generationNumber
       );
-      grid = this.unFlattenNodes(nextPopulation);
+      generationNumber++;
     }
+    grid = this.unFlattenNodes(flattenedNodes);
     this.setState({
       grid: grid,
       generationNumber: this.state.generationNumber + times,
@@ -62,7 +65,16 @@ export default class GeneticVisualizer extends React.Component<
     for (let i = 0; i < numCrossovers; i++) {
       let parents = this.getParents(matingPool);
       let offspring = GeneticNode.crossover(parents[0], parents[1]);
-      offspring.mutate(generationNumber);
+      switch (this.props.settings.mutationType) {
+        case MutationType.Gradual: {
+          offspring.mutateGradual(generationNumber);
+          break;
+        }
+        case MutationType.Invert: {
+          offspring.mutateInvert(generationNumber);
+          break;
+        }
+      }
       nextPopulation.push(offspring);
     }
     return nextPopulation;
@@ -77,24 +89,6 @@ export default class GeneticVisualizer extends React.Component<
     return [matingPool[index1], matingPool[index2]];
   }
 
-  private getMatingPool(
-    flattenedNodes: GeneticNode[],
-    targetColor: [number, number, number]
-  ): GeneticNode[] {
-    let threshold = 0.2;
-    flattenedNodes = flattenedNodes.sort((a, b) =>
-      a.getDistanceFromTarget(targetColor) <
-      b.getDistanceFromTarget(targetColor)
-        ? -1
-        : 1
-    );
-    console.log(flattenedNodes[0].colorVector);
-    return flattenedNodes.slice(
-      0,
-      Math.round(flattenedNodes.length * threshold)
-    );
-  }
-
   private getFlattenedNodes(geneticNodes: GeneticNode[][]): GeneticNode[] {
     let flattenedNodes: GeneticNode[] = [];
     for (let i = 0; i < geneticNodes.length; i++) {
@@ -106,13 +100,9 @@ export default class GeneticVisualizer extends React.Component<
   }
 
   sortByFitness = () => {
+    let endColor = this.props.settings.endColor;
     let flattenedNodes = this.getFlattenedNodes(this.state.grid);
-    flattenedNodes = flattenedNodes.sort((a, b) =>
-      a.getDistanceFromTarget(this.props.endColor) <
-      b.getDistanceFromTarget(this.props.endColor)
-        ? -1
-        : 1
-    );
+    GeneticNode.sortByFitness(flattenedNodes, endColor);
     this.setState({
       grid: this.unFlattenNodes(flattenedNodes),
     });
@@ -136,7 +126,7 @@ export default class GeneticVisualizer extends React.Component<
                       <Node
                         key={`${rowIdx}-${nodeIdx}`}
                         geneticNode={node}
-                        populationSize={this.props.populationSize}
+                        populationSize={this.props.settings.populationSize}
                       ></Node>
                     </Col>
                   );
@@ -166,7 +156,7 @@ export default class GeneticVisualizer extends React.Component<
 
   getInitialGrid = () => {
     let size = 0;
-    switch (this.props.populationSize) {
+    switch (this.props.settings.populationSize) {
       case PopulationSize.Small: {
         size = 10;
         break;
