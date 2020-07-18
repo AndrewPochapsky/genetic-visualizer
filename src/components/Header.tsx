@@ -9,6 +9,7 @@ type HeaderProps = {
   mutationChance: number;
   nextGeneration: Function;
   sortByFitness: Function;
+  switchToSettings: Function;
 };
 
 export default class Header extends React.Component<HeaderProps> {
@@ -44,6 +45,13 @@ export default class Header extends React.Component<HeaderProps> {
               onClick={(_) => this.props.nextGeneration(10)}
             >
               Next Generation (x10)
+            </Button>
+            <Button
+              className="mr-sm-2"
+              variant="dark"
+              onClick={(_) => this.props.switchToSettings()}
+            >
+              Reset
             </Button>
           </Form>
         </Navbar.Collapse>

@@ -22,13 +22,13 @@ export default class GeneticNode {
 
   static getMatingPool(
     flattenedNodes: GeneticNode[],
-    targetColor: [number, number, number]
+    targetColor: [number, number, number],
+    matingPoolPercent: number
   ): GeneticNode[] {
-    let threshold = 0.2;
     this.sortByFitness(flattenedNodes, targetColor);
     return flattenedNodes.slice(
       0,
-      Math.round(flattenedNodes.length * threshold)
+      Math.round(flattenedNodes.length * matingPoolPercent)
     );
   }
 

@@ -9,6 +9,7 @@ export interface SettingsState {
   mutationType: MutationType;
   mutationChance: number;
   decreaseMutation: boolean;
+  matingPoolPercent: number;
 }
 
 type SettingsProps = {
@@ -32,7 +33,8 @@ export function getDefaultSettings(): SettingsState {
     populationSize: PopulationSize.Medium,
     mutationType: MutationType.Gradual,
     mutationChance: 0.3,
-    decreaseMutation: true,
+    decreaseMutation: false,
+    matingPoolPercent: 0.25,
   };
 }
 
@@ -96,6 +98,22 @@ export default class Settings extends React.Component<
     this.setState({ decreaseMutation: e.currentTarget.checked });
   };
 
+  private handleMutationChanceChange = (
+    e: React.ChangeEvent<HTMLSelectElement>
+  ) => {
+    this.setState({
+      mutationChance: +e.currentTarget.value,
+    });
+  };
+
+  private handleMatingPoolPercentChange = (
+    e: React.ChangeEvent<HTMLSelectElement>
+  ) => {
+    this.setState({
+      matingPoolPercent: +e.currentTarget.value,
+    });
+  };
+
   private hexToRgb(hex: string): [number, number, number] {
     var result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
     return [
@@ -105,14 +123,6 @@ export default class Settings extends React.Component<
     ];
   }
 
-  private handleMutationChanceChange = (
-    e: React.ChangeEvent<HTMLSelectElement>
-  ) => {
-    this.setState({
-      mutationChance: +e.currentTarget.value,
-    });
-  };
-
   render() {
     return (
       <div className="container">
@@ -121,11 +131,15 @@ export default class Settings extends React.Component<
           <Card.Body>
             <Form>
               <Form.Group controlId="formEndColor">
-                <Form.Label>The color to converge to</Form.Label>
+                <Form.Label style={{ fontWeight: "bold" }}>
+                  The color to converge to:
+                </Form.Label>
                 <Form.Control type="color" onChange={this.handleColorChange} />
               </Form.Group>
               <Form.Group controlId="formPopulationSize">
-                <Form.Label>Population Size</Form.Label>
+                <Form.Label style={{ fontWeight: "bold" }}>
+                  Population Size:
+                </Form.Label>
                 <Form.Control
                   as="select"
                   defaultValue="Medium"
@@ -137,7 +151,9 @@ export default class Settings extends React.Component<
                 </Form.Control>
               </Form.Group>
               <Form.Group controlId="formMutationType">
-                <Form.Label>Mutation Type</Form.Label>
+                <Form.Label style={{ fontWeight: "bold" }}>
+                  Mutation Type:
+                </Form.Label>
                 <Form.Control
                   as="select"
                   defaultValue="Gradual"
@@ -155,9 +171,10 @@ export default class Settings extends React.Component<
                   checked={this.state.decreaseMutation}
                 />
               </Form.Group>
-              <Form.Group controlId="formBasicRange">
+              <Form.Group controlId="formMutationRange">
                 <Form.Label>
-                  Mutation Chance: {this.state.mutationChance}
+                  <span style={{ fontWeight: "bold" }}>Mutation Chance:</span>{" "}
+                  {this.state.mutationChance}
                 </Form.Label>
                 <Form.Control
                   type="range"
@@ -166,6 +183,22 @@ export default class Settings extends React.Component<
                   step="0.05"
                   value={this.state.mutationChance}
                   onChange={this.handleMutationChanceChange}
+                />
+              </Form.Group>
+              <Form.Group controlId="formMatingPoolRange">
+                <Form.Label>
+                  <span style={{ fontWeight: "bold" }}>
+                    Percentage of popluation in mating pool:
+                  </span>{" "}
+                  {this.state.matingPoolPercent}
+                </Form.Label>
+                <Form.Control
+                  type="range"
+                  min="0"
+                  max="1"
+                  step="0.05"
+                  value={this.state.matingPoolPercent}
+                  onChange={this.handleMatingPoolPercentChange}
                 />
               </Form.Group>
               <Button variant="primary" onClick={this.handleVisualize}>

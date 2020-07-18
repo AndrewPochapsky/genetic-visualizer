@@ -24,11 +24,20 @@ class App extends React.Component<{}, AppState> {
     });
   };
 
+  switchToSettings = () => {
+    this.setState({ isSettings: true });
+  };
+
   render() {
     if (this.state.isSettings) {
       return <Settings switchToVisualize={this.switchToVisualize} />;
     } else {
-      return <GeneticVisualizer settings={this.state.settings} />;
+      return (
+        <GeneticVisualizer
+          settings={this.state.settings}
+          switchToSettings={this.switchToSettings}
+        />
+      );
     }
   }
 }

@@ -10,6 +10,7 @@ import Col from "react-bootstrap/Col";
 
 type VisualizerProps = {
   settings: SettingsState;
+  switchToSettings: Function;
 };
 
 type VisualizerState = {
@@ -41,7 +42,8 @@ export default class GeneticVisualizer extends React.Component<
     for (let i = 0; i < times; i++) {
       let matingPool = GeneticNode.getMatingPool(
         flattenedNodes,
-        this.props.settings.endColor
+        this.props.settings.endColor,
+        this.props.settings.matingPoolPercent
       );
       let numCrossovers = flattenedNodes.length - matingPool.length;
       flattenedNodes = this.getNextPopulation(
@@ -126,6 +128,7 @@ export default class GeneticVisualizer extends React.Component<
           mutationChance={this.state.mutationChance}
           nextGeneration={this.nextGeneration}
           sortByFitness={this.sortByFitness}
+          switchToSettings={this.props.switchToSettings}
         />
         <Container fluid="sm">
           {this.state.grid.map((row, rowIdx) => {
