@@ -57,19 +57,28 @@ export default class GeneticNode {
     );
   }
 
-  mutateGradual(generationNumber: number) {
-    this.mutate(
+  mutateGradual(generationNumber: number, mutationChance: number): number {
+    return this.mutate(
       generationNumber,
+      mutationChance,
       (x: number) => x + this.getRandomInt(-50, 50)
     );
   }
 
-  mutateInvert(generationNumber: number) {
-    this.mutate(generationNumber, (x: number) => 255 - x);
+  mutateInvert(generationNumber: number, mutationChance: number): number {
+    return this.mutate(
+      generationNumber,
+      mutationChance,
+      (x: number) => 255 - x
+    );
   }
 
-  private mutate(generationNumber: number, mutation: Function) {
-    let mutationChance = this.getMutationChance(generationNumber);
+  private mutate(
+    generationNumber: number,
+    mutationChance: number,
+    mutation: Function
+  ): number {
+    mutationChance = this.getMutationChance(mutationChance, generationNumber);
     for (let i = 0; i < 3; i++) {
       let value = Math.random();
       if (value <= mutationChance) {
@@ -82,6 +91,7 @@ export default class GeneticNode {
         }
       }
     }
+    return mutationChance;
   }
 
   private getRandomInt(min: number, max: number): number {
@@ -93,8 +103,10 @@ export default class GeneticNode {
   /*
    * As the generation number goes up the mutation chance should be decreased.
    */
-  getMutationChance(generationNumber: number) {
-    let baseChance = 0.2;
-    return baseChance / generationNumber;
+  getMutationChance(mutationChance: number, generationNumber: number) {
+    if (generationNumber !== -1) {
+      return mutationChance / generationNumber;
+    }
+    return mutationChance;
   }
 }

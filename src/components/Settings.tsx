@@ -7,6 +7,8 @@ export interface SettingsState {
   endColor: [number, number, number];
   populationSize: PopulationSize;
   mutationType: MutationType;
+  mutationChance: number;
+  decreaseMutation: boolean;
 }
 
 type SettingsProps = {
@@ -29,6 +31,8 @@ export function getDefaultSettings(): SettingsState {
     endColor: [0, 0, 0],
     populationSize: PopulationSize.Medium,
     mutationType: MutationType.Gradual,
+    mutationChance: 0.3,
+    decreaseMutation: true,
   };
 }
 
@@ -88,6 +92,10 @@ export default class Settings extends React.Component<
     this.setState({ endColor: this.hexToRgb(e.currentTarget.value) });
   };
 
+  private handleCheckBoxChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    this.setState({ decreaseMutation: e.currentTarget.checked });
+  };
+
   private hexToRgb(hex: string): [number, number, number] {
     var result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
     return [
@@ -96,6 +104,14 @@ export default class Settings extends React.Component<
       parseInt(result![3], 16),
     ];
   }
+
+  private handleMutationChanceChange = (
+    e: React.ChangeEvent<HTMLSelectElement>
+  ) => {
+    this.setState({
+      mutationChance: +e.currentTarget.value,
+    });
+  };
 
   render() {
     return (
@@ -130,6 +146,27 @@ export default class Settings extends React.Component<
                   <option>Gradual</option>
                   <option>Invert</option>
                 </Form.Control>
+              </Form.Group>
+              <Form.Group controlId="formCheck">
+                <Form.Check
+                  type="checkbox"
+                  label="Decrease mutation chance over generations"
+                  onChange={this.handleCheckBoxChange}
+                  checked={this.state.decreaseMutation}
+                />
+              </Form.Group>
+              <Form.Group controlId="formBasicRange">
+                <Form.Label>
+                  Mutation Chance: {this.state.mutationChance}
+                </Form.Label>
+                <Form.Control
+                  type="range"
+                  min="0"
+                  max="1"
+                  step="0.05"
+                  value={this.state.mutationChance}
+                  onChange={this.handleMutationChanceChange}
+                />
               </Form.Group>
               <Button variant="primary" onClick={this.handleVisualize}>
                 Visualize

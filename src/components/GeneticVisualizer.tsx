@@ -15,6 +15,7 @@ type VisualizerProps = {
 type VisualizerState = {
   grid: GeneticNode[][];
   generationNumber: number;
+  mutationChance: number;
 };
 
 export default class GeneticVisualizer extends React.Component<
@@ -24,6 +25,7 @@ export default class GeneticVisualizer extends React.Component<
   state: VisualizerState = {
     grid: [],
     generationNumber: 1,
+    mutationChance: this.props.settings.mutationChance,
   };
 
   componentDidMount() {
@@ -65,16 +67,24 @@ export default class GeneticVisualizer extends React.Component<
     for (let i = 0; i < numCrossovers; i++) {
       let parents = this.getParents(matingPool);
       let offspring = GeneticNode.crossover(parents[0], parents[1]);
+      let mutationChance = 0;
       switch (this.props.settings.mutationType) {
         case MutationType.Gradual: {
-          offspring.mutateGradual(generationNumber);
+          mutationChance = offspring.mutateGradual(
+            this.props.settings.decreaseMutation ? generationNumber : -1,
+            this.props.settings.mutationChance
+          );
           break;
         }
         case MutationType.Invert: {
-          offspring.mutateInvert(generationNumber);
+          mutationChance = offspring.mutateInvert(
+            this.props.settings.decreaseMutation ? generationNumber : -1,
+            this.props.settings.mutationChance
+          );
           break;
         }
       }
+      this.setState({ mutationChance: mutationChance });
       nextPopulation.push(offspring);
     }
     return nextPopulation;
@@ -113,6 +123,7 @@ export default class GeneticVisualizer extends React.Component<
       <div>
         <Header
           generationNumber={this.state.generationNumber}
+          mutationChance={this.state.mutationChance}
           nextGeneration={this.nextGeneration}
           sortByFitness={this.sortByFitness}
         />
