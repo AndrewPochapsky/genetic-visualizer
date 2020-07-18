@@ -1,0 +1,25 @@
+{
+  "files": {
+    "main.css": "/genetic-visualizer/static/css/main.f14e773c.chunk.css",
+    "main.js": "/genetic-visualizer/static/js/main.ffe6ee06.chunk.js",
+    "main.js.map": "/genetic-visualizer/static/js/main.ffe6ee06.chunk.js.map",
+    "runtime-main.js": "/genetic-visualizer/static/js/runtime-main.7751de35.js",
+    "runtime-main.js.map": "/genetic-visualizer/static/js/runtime-main.7751de35.js.map",
+    "static/css/2.af3c1da9.chunk.css": "/genetic-visualizer/static/css/2.af3c1da9.chunk.css",
+    "static/js/2.181dc354.chunk.js": "/genetic-visualizer/static/js/2.181dc354.chunk.js",
+    "static/js/2.181dc354.chunk.js.map": "/genetic-visualizer/static/js/2.181dc354.chunk.js.map",
+    "index.html": "/genetic-visualizer/index.html",
+    "precache-manifest.c3621fb5e3aa4237674c75be47e91813.js": "/genetic-visualizer/precache-manifest.c3621fb5e3aa4237674c75be47e91813.js",
+    "service-worker.js": "/genetic-visualizer/service-worker.js",
+    "static/css/2.af3c1da9.chunk.css.map": "/genetic-visualizer/static/css/2.af3c1da9.chunk.css.map",
+    "static/css/main.f14e773c.chunk.css.map": "/genetic-visualizer/static/css/main.f14e773c.chunk.css.map",
+    "static/js/2.181dc354.chunk.js.LICENSE.txt": "/genetic-visualizer/static/js/2.181dc354.chunk.js.LICENSE.txt"
+  },
+  "entrypoints": [
+    "static/js/runtime-main.7751de35.js",
+    "static/css/2.af3c1da9.chunk.css",
+    "static/js/2.181dc354.chunk.js",
+    "static/css/main.f14e773c.chunk.css",
+    "static/js/main.ffe6ee06.chunk.js"
+  ]
+}
