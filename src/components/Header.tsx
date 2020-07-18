@@ -16,7 +16,7 @@ export default class Header extends React.Component<HeaderProps> {
   render() {
     return (
       <Navbar bg="light" expand="lg">
-        <Navbar.Brand href="#home">Genetic Visualizer</Navbar.Brand>
+        <Navbar.Brand>Genetic Visualizer</Navbar.Brand>
         <Navbar.Toggle aria-controls="basic-navbar-nav" />
         <Navbar.Collapse id="basic-navbar-nav">
           <Nav className="mr-auto">
