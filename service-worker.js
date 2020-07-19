@@ -14,7 +14,7 @@
 importScripts("https://storage.googleapis.com/workbox-cdn/releases/4.3.1/workbox-sw.js");
 
 importScripts(
-  "/genetic-visualizer/precache-manifest.245dd32ad06f055308559c93d7cc239b.js"
+  "/genetic-visualizer/precache-manifest.68cf5f0d766216095436e7738aea676e.js"
 );
 
 self.addEventListener('message', (event) => {
