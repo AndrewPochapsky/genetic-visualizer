@@ -24,7 +24,7 @@ export default class Header extends React.Component<HeaderProps> {
               Generation Number: {this.props.generationNumber}
             </Navbar.Text>
             <Navbar.Text className="mr-sm-2">
-              Mutation Chance: {this.props.mutationChance}
+              Mutation Chance: {this.props.mutationChance * 100}%
             </Navbar.Text>
           </Nav>
           <Form inline>
